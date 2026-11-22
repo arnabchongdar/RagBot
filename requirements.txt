@@ -1,0 +1,25 @@
+# Insurance RAG Q&A Bot — dependencies
+# All resolve to cp314 / abi3 / pure-python wheels on Python 3.14 (verified).
+
+# --- Core RAG pipeline ---
+pymupdf>=1.24                 # PDF text extraction (PyMuPDF / PyMuPDFLoader backend)
+sentence-transformers>=3.0    # gte-large embeddings (pulls torch, transformers, tokenizers)
+chromadb>=0.5                 # vector database
+langchain-community>=0.3      # PyMuPDFLoader document loader
+langchain-text-splitters>=0.3 # RecursiveCharacterTextSplitter
+langchain-ollama>=0.2         # ChatOllama generator
+ollama>=0.3                   # Ollama python client
+tiktoken>=0.7                 # tokenization utilities
+
+# --- Evaluation ---
+rouge-score>=0.1.2            # ROUGE (reference-based)
+sacrebleu>=2.4                # BLEU (reference-based)
+
+# --- Tooling: synthetic PDFs, config, CLI, tables ---
+fpdf2>=2.7                    # generate synthetic insurance PDFs (pure-python)
+pyyaml>=6.0                   # config.yaml
+click>=8.1                    # CLI framework
+rich>=13.7                    # pretty comparison tables / console output
+
+# --- Web UI (optional) ---
+streamlit>=1.40               # upload PDFs, re-run ingest, ask questions (app.py)

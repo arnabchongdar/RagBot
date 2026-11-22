@@ -1,0 +1,15 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+
+# Project artifacts
+data/chroma/
+install.log
+*.json
+!config*.json
+
+# OS
+.DS_Store
+Thumbs.db

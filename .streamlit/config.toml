@@ -1,0 +1,13 @@
+# Streamlit configuration for the Insurance RAG UI.
+
+[server]
+# The default watcher introspects every installed module (including transformers'
+# optional image models) to enable hot-reload, which spams the log with harmless
+# "No module named 'torchvision'" tracebacks. We don't need source hot-reload for
+# a delivered app, so turn the watcher off. Set to "auto" if you're editing app.py
+# and want automatic reruns on save.
+fileWatcherType = "none"
+headless = true
+
+[browser]
+gatherUsageStats = false

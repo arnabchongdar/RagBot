@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "insurance-rag"
+version = "0.1.0"
+description = "Retrieval-Augmented Generation Q&A bot for insurance policy and claims documents"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "pymupdf>=1.24",
+    "sentence-transformers>=3.0",
+    "chromadb>=0.5",
+    "langchain-community>=0.3",
+    "langchain-text-splitters>=0.3",
+    "langchain-ollama>=0.2",
+    "ollama>=0.3",
+    "tiktoken>=0.7",
+    "rouge-score>=0.1.2",
+    "sacrebleu>=2.4",
+    "fpdf2>=2.7",
+    "pyyaml>=6.0",
+    "click>=8.1",
+    "rich>=13.7",
+]
+
+[project.scripts]
+insurance-rag = "insurance_rag.cli:cli"
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0"]
+ui = ["streamlit>=1.40"]
+
+[tool.setuptools.packages.find]
+where = ["src"]

@@ -1,0 +1,107 @@
+# ============================================================================
+# Insurance RAG Q&A Bot — central configuration
+# Values mirror the project report (chunk 512/20, gte-large, k=3, configs C1-C5)
+# ============================================================================
+
+paths:
+  docs_dir: docs                 # drop your real insurance PDFs here
+  synthetic_dir: docs/synthetic  # auto-generated sample PDFs
+  chroma_dir: data/chroma        # persisted vector database
+
+chunking:
+  chunk_size: 512
+  chunk_overlap: 20
+
+embedding:
+  # Fast CPU-friendly embedder (384-dim). ~5-10x faster to ingest than the
+  # report's thenlper/gte-large, which spends ~2s/chunk on a CPU-only machine.
+  # Swap back to 'thenlper/gte-large' (higher quality, much slower) or use
+  # 'thenlper/gte-small' for a middle ground. Changing this requires a re-ingest
+  # with --reset (the vector dimension changes).
+  model_name: sentence-transformers/all-MiniLM-L6-v2
+  device: cpu                       # 'cpu' or 'cuda'
+  normalize: true
+
+vectorstore:
+  collection_name: insurance_docs
+
+retriever:
+  search_type: similarity          # report §5.6
+  k: 3
+
+llm:
+  provider: ollama                 # local, offline (fulfils report's "no external API" goal)
+  model: mistral                   # Mistral-7B-Instruct family (report §2.2), already pulled
+  host: http://localhost:11434
+  # default generation options (report §2.2)
+  temperature: 0.2
+  top_p: 0.95
+  top_k: 50
+  max_tokens: 256
+  num_ctx: 4096
+
+# Judge model for LLM-as-a-Judge evaluation (report §8.4).
+# Ideally an independent model; for the prototype we reuse the local model.
+evaluation:
+  judge_model: mistral
+  judge_temperature: 0.0
+
+# Five fine-tuning configurations (report §9)
+sweep_configs:
+  - name: C1_Baseline
+    k: 3
+    temperature: 0.7
+    max_tokens: 128
+    top_p: 0.95
+    top_k: 50
+  - name: C2_HighK
+    k: 5
+    temperature: 0.0
+    max_tokens: 128
+    top_p: 0.95
+    top_k: 50
+  - name: C3_LowK
+    k: 2
+    temperature: 0.0
+    max_tokens: 128
+    top_p: 0.8
+    top_k: 30
+  - name: C4_MoreTokens
+    k: 3
+    temperature: 0.0
+    max_tokens: 256
+    top_p: 0.95
+    top_k: 50
+  - name: C5_Creative
+    k: 3
+    temperature: 0.3
+    max_tokens: 256
+    top_p: 0.9
+    top_k: 50
+
+# Canonical evaluation queries (report §3, §8). Optional gold answers enable ROUGE/BLEU.
+queries:
+  - id: q1_home_water
+    question: "Is water damage covered under my home insurance policy?"
+    gold: >
+      Sudden and accidental water damage, such as damage from a burst pipe or an
+      overflowing appliance, is typically covered under the home insurance policy.
+      Damage caused by flood, gradual seepage, leakage over time, or wear and tear
+      is generally excluded unless a specific add-on or endorsement has been purchased.
+  - id: q2_motor_claim
+    question: "My car was damaged in an accident. How do I file a claim and what documents are required?"
+    gold: >
+      Notify the insurer as soon as possible, generally within 48 hours of the accident,
+      using the claim helpline or app. Submit the completed claim form, a copy of the policy,
+      the vehicle registration certificate, the driving licence, and repair estimates.
+      For theft or third-party injury a police FIR is required. The insurer arranges a survey
+      or inspection before repairs. Cashless repair is available at network garages, and the
+      applicable deductible or compulsory excess is borne by the insured.
+  - id: q3_health_rejection
+    question: "Why was my health insurance claim rejected?"
+    gold: >
+      Common reasons a health claim is rejected include treatment during the initial
+      30-day waiting period, claims for pre-existing conditions still within their waiting
+      period, treatment that falls under a specific policy exclusion, non-disclosure of
+      material facts, missing or incomplete documentation, and amounts beyond applicable
+      sub-limits. The exact reason depends on the policy terms and the claim records.

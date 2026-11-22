@@ -1,0 +1,72 @@
+=== EVALUATE (Â§8.4) ===
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/391 [00:00<?, ?it/s]Loading weights: 100%|##########| 391/391 [00:00<00:00, 7793.44it/s]
+                    Evaluation: baseline vs prompted vs RAG                    
++-----------------------------------------------------------------------------+
+| Query  | Mode   | Groun… | Relev… | ROUGE-L | BLEU | J:Gro… | J:Rel | J:Coh |
+|--------+--------+--------+--------+---------+------+--------+-------+-------|
+| Is     | basel… | 0.882  | 0.937  | 0.195   | 8.0  | 5      | 5     | 4     |
+| water  |        |        |        |         |      |        |       |       |
+| damage |        |        |        |         |      |        |       |       |
+| cover… |        |        |        |         |      |        |       |       |
+| under  |        |        |        |         |      |        |       |       |
+| my...  |        |        |        |         |      |        |       |       |
+| Is     | promp… | 0.870  | 0.947  | 0.201   | 5.9  | 5      | 5     | 4     |
+| water  |        |        |        |         |      |        |       |       |
+| damage |        |        |        |         |      |        |       |       |
+| cover… |        |        |        |         |      |        |       |       |
+| under  |        |        |        |         |      |        |       |       |
+| my...  |        |        |        |         |      |        |       |       |
+| Is     | rag    | 0.892  | 0.941  | 0.163   | 4.8  | 5      | 5     | 4     |
+| water  |        |        |        |         |      |        |       |       |
+| damage |        |        |        |         |      |        |       |       |
+| cover… |        |        |        |         |      |        |       |       |
+| under  |        |        |        |         |      |        |       |       |
+| my...  |        |        |        |         |      |        |       |       |
+| My car | basel… | 0.832  | 0.923  | 0.179   | 3.2  | 5      | 5     | 4     |
+| was    |        |        |        |         |      |        |       |       |
+| damag… |        |        |        |         |      |        |       |       |
+| in an  |        |        |        |         |      |        |       |       |
+| accid… |        |        |        |         |      |        |       |       |
+| My car | promp… | 0.861  | 0.942  | 0.178   | 2.7  | 5      | 5     | 4     |
+| was    |        |        |        |         |      |        |       |       |
+| damag… |        |        |        |         |      |        |       |       |
+| in an  |        |        |        |         |      |        |       |       |
+| accid… |        |        |        |         |      |        |       |       |
+| My car | rag    | 0.905  | 0.931  | 0.398   | 16.6 | 5      | 5     | 5     |
+| was    |        |        |        |         |      |        |       |       |
+| damag… |        |        |        |         |      |        |       |       |
+| in an  |        |        |        |         |      |        |       |       |
+| accid… |        |        |        |         |      |        |       |       |
+| Why    | basel… | 0.851  | 0.950  | 0.151   | 0.8  | 5      | 5     | 4     |
+| was my |        |        |        |         |      |        |       |       |
+| health |        |        |        |         |      |        |       |       |
+| insur… |        |        |        |         |      |        |       |       |
+| clai.… |        |        |        |         |      |        |       |       |
+| Why    | promp… | 0.844  | 0.928  | 0.134   | 1.5  | 5      | 5     | 4     |
+| was my |        |        |        |         |      |        |       |       |
+| health |        |        |        |         |      |        |       |       |
+| insur… |        |        |        |         |      |        |       |       |
+| clai.… |        |        |        |         |      |        |       |       |
+| Why    | rag    | 0.842  | 0.919  | 0.436   | 9.1  | 5      | 5     | 5     |
+| was my |        |        |        |         |      |        |       |       |
+| health |        |        |        |         |      |        |       |       |
+| insur… |        |        |        |         |      |        |       |       |
+| clai.… |        |        |        |         |      |        |       |       |
++-----------------------------------------------------------------------------+
+Wrote eval_results.json
+=== SWEEP (Â§9) ===
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/391 [00:00<?, ?it/s]Loading weights: 100%|##########| 391/391 [00:00<00:00, 8290.02it/s]
+                RAG fine-tuning sweep (avg over queries)                
++----------------------------------------------------------------------+
+| Config        | k | temp | max_tokens | Avg Grounded | Avg Relevance |
+|---------------+---+------+------------+--------------+---------------|
+| C1_Baseline   | 3 | 0.7  | 128        | 0.873        | 0.934         |
+| C2_HighK      | 5 | 0    | 128        | 0.885        | 0.930         |
+| C3_LowK       | 2 | 0    | 128        | 0.876        | 0.933         |
+| C4_MoreTokens | 3 | 0    | 256        | 0.880        | 0.932         |
+| C5_Creative   | 3 | 0.3  | 256        | 0.873        | 0.936         |
++----------------------------------------------------------------------+
+Wrote sweep_results.json
+VALIDATION_DONE
